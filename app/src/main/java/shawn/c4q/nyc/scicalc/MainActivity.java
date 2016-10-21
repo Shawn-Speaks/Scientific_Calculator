@@ -2,21 +2,18 @@ package shawn.c4q.nyc.scicalc;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "DEBUG TOOL";
     StringBuilder myBuiltStr = new StringBuilder();
-    String tempStr;
+    String tempStr = "";
     TextView inputTextView;
-    public static ArrayList<Double> myNumList = new ArrayList<>();
-    public static ArrayList<String>  myOppList = new ArrayList<>();
     private static final String myPlaceHolder = "random_string";
+    int idxOfLastOpp = 0;
+    int idxOfDecimal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,180 +21,159 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         inputTextView = (TextView) findViewById(R.id.edit_text_id);
         inputTextView.setKeyListener(null);
-        inputTextView.setText(myBuiltStr.toString());
+        inputTextView.setText(tempStr);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        // Read values from the "savedInstanceState"-object and put them in your textview
         if(savedInstanceState != null){
-            myBuiltStr = (StringBuilder) savedInstanceState.getCharSequence(myPlaceHolder);
+            tempStr = (String) savedInstanceState.getCharSequence(myPlaceHolder);
+            inputTextView.setText(tempStr);
         }
+
+        //// FIXME: 10/14/16 I DONT DISPLAY 'tempStr' WHEN SWITCHED FROM LANDSCAPE TO PORTRAIT
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the values you need from your textview into "outState"-object
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putCharSequence(myPlaceHolder, myBuiltStr);
+        savedInstanceState.putCharSequence(myPlaceHolder, tempStr);
     }
-
 
     public void buttonOnClick(View view){
         int buttonID = view.getId();
         Button button = (Button) view;
+        boolean decimalAllowed = true; //SET TRUE WHEN DECIMAL IS PRESSED, RESET WHEN OPERATION OR TRIG IS CALLED
+        String buttonPressedStrForm = button.getText().toString();
+
+
+        if(tempStr.length() > 0) {
+            for (int i = 0; i < tempStr.length(); i++) {
+                if (isLastCharOperand(tempStr.charAt(i))){
+                    idxOfLastOpp = i;
+                }else if (tempStr.charAt(i) =='.'){
+                    idxOfDecimal = i;
+                }
+            }
+            if(idxOfDecimal > idxOfLastOpp){
+                decimalAllowed = false;
+            }else
+                decimalAllowed = true;
+        }  // // FIXME: 10/14/16 I DO WEIRD STUFF AND I DON'T WORK
+
+
         if (buttonID == (R.id.portrait_delete)){
-            if (myBuiltStr.length() > 0) {
-                myBuiltStr.deleteCharAt(myBuiltStr.length() - 1);
+            if (tempStr.length() > 0) {
+                tempStr = tempStr.substring(0, tempStr.length()-1);
             }
-            tempStr = myBuiltStr.toString();
-            Log.d(TAG, tempStr);
             inputTextView.setText(tempStr);
-        }else if(buttonID == (R.id.portrait_equals)){
-            parseString(tempStr);
-            inputTextView.setText(String.valueOf(evalAndPemdas()));
-            tempStr = String.valueOf(evalAndPemdas());
-            StringBuilder tempSB = new StringBuilder();
-            myBuiltStr = tempSB.append(tempStr);
-            myNumList.clear();
-            myOppList.clear();
+        } else if(buttonID == (R.id.portrait_clear)){
+            tempStr = "";
+            inputTextView.setText(tempStr);
+        } else if(buttonID == (R.id.portrait_period)){
+            if(decimalAllowed){
+                tempStr = tempStr.concat(buttonPressedStrForm);
+                inputTextView.setText(tempStr);
+            }
+        }else if(buttonID == (R.id.sin) || buttonID == (R.id.cos) || buttonID == (R.id.tan)){
+                tempStr = tempStr.concat(buttonPressedStrForm + "(");
+                inputTextView.setText(tempStr);
         }
-        else{
-            String buttonPressedStrForm = button.getText().toString();
-            myBuiltStr.append(buttonPressedStrForm);
-            tempStr = myBuiltStr.toString();
-            Log.d(TAG, tempStr);
+        else if(buttonID == (R.id.portrait_equals)){
+            tempStr = fillInLast(tempStr);
+            tempStr = matchParens(tempStr);
+            tempStr = makeNice(tempStr);
+            Calculator calc = new Calculator();
+            tempStr = calc.calculate(tempStr);
             inputTextView.setText(tempStr);
         }
-    }
+        else {
 
-    public static double evalAndPemdas() {
-        while (!myOppList.isEmpty()) {
-
-            while(listContainsMultOrDiv(myOppList)) {
-                for(int i = 0; i < myOppList.size(); i++) {
-                    getOperation2(i);
+            if (tempStr.length() == 0 && (buttonID == R.id.portrait_division || buttonID == R.id.portrait_plus || buttonID == R.id.portrait_multiplication)) { //IF NO BUTTON WAS PRESSED DISABLE OPERATIONS BESIDES MINUS.
+                myBuiltStr.append("");
+            } else {
+                if (!tempStr.isEmpty() && (isLastCharOperand(tempStr.charAt(tempStr.length() - 1)) && isLastCharOperand(buttonPressedStrForm.charAt(0)))) {
+                    if (buttonID == R.id.portrait_division || buttonID == R.id.portrait_plus || buttonID == R.id.portrait_multiplication) {
+                        tempStr = tempStr.substring(0, tempStr.length() - 1);
+                        tempStr = tempStr.concat(buttonPressedStrForm);
+                        inputTextView.setText(tempStr);
+                    } else if (buttonID == R.id.portrait_minus) {
+                        if (tempStr.charAt(tempStr.length() - 1) == '-') {
+                            myBuiltStr.append("");
+                        } else {
+                            tempStr = tempStr.concat(buttonPressedStrForm);
+                            inputTextView.setText(tempStr);
+                        }
+                    } else {
+                        tempStr = tempStr.concat(buttonPressedStrForm);
+                        inputTextView.setText(tempStr);
+                    }
+                } else {
+                    tempStr = tempStr.concat(buttonPressedStrForm);
+                    inputTextView.setText(tempStr);
                 }
             }
+        }
+    }
 
-            while(listContainsAddOrSub(myOppList)) {
-                for (int i = 0; i < myOppList.size(); i++) {
-                    getOperation3(i);
+    static String matchParens(String inputString) {
+        int openCount = 0;
+        int closeCount = 0;
+        StringBuilder mySB = new StringBuilder();
+        for (int i = 0; i < inputString.length(); i++) {
+            if (inputString.charAt(i) == '(') {
+                openCount++;
+            } else if (inputString.charAt(i) == ')') {
+                closeCount++;
+            }
+        }
+        if (openCount > closeCount) {
+            while (openCount != closeCount) {
+                mySB.append(")");
+                closeCount++;
+            }
+            inputString = inputString + mySB.toString();
+        } else if (openCount < closeCount) {
+            while (openCount != closeCount) {
+                mySB.append("(");
+                openCount++;
+            }
+            inputString = mySB.toString() + inputString;
+        }
+        return inputString;
+    }
+
+
+    static String fillInLast(String inputString){
+        if(inputString.charAt(inputString.length()-1) == ('*') || inputString.charAt(inputString.length()-1) == ('/')){
+            inputString = inputString.concat("1");
+        }
+        if(inputString.charAt(inputString.length()-1) == ('-') || inputString.charAt(inputString.length()-1) == ('+')){
+            inputString = inputString.concat("0");
+        }
+        return inputString;
+    }
+
+    static boolean isLastCharOperand(char c){
+        return (c == '*'|| c == '/'|| c == '+' || c == '-');
+    }
+
+    static String makeNice(String inputString) {
+        String toReturn = inputString;
+        for (int i = 1; i < toReturn.length() - 1; i++) {
+            if (toReturn.charAt(i) == '(') {
+                if (Character.isDigit(toReturn.charAt(i - 1))) {
+                    toReturn = toReturn.substring(0, i) + "*" + toReturn.substring(i, toReturn.length());
+                }
+            }
+            if (toReturn.charAt(i) == ')' && (i != toReturn.length() - 1)) {
+                if (Character.isDigit(toReturn.charAt(i + 1))) {
+                    toReturn = toReturn.substring(0, i + 1) + "*" + toReturn.substring(i + 1, toReturn.length());
                 }
             }
         }
-        return myNumList.get(0);
+        return toReturn;
     }
 
-    public static boolean isOperand (char aChar){
-        return (aChar == 42 ||aChar == 43 ||aChar == 45 ||aChar == 47);
-    }
-
-    public static boolean isDigitOrDecimal (char aChar){
-        return ((aChar > 47 && aChar < 58) || aChar == 46);
-    }
-
-    public static void parseString (String bString) {
-        String tempString = "";
-        for (int z = 0; z < bString.length(); z++) {
-
-            if (isDigitOrDecimal(bString.charAt(z))){
-
-                tempString = tempString.concat("" + bString.charAt(z));
-                if(z == bString.length()-1){
-                    myNumList.add(Double.valueOf(tempString));
-                }
-
-            }else if (isOperand(bString.charAt(z))) {
-                myNumList.add(Double.valueOf(tempString));
-                myOppList.add("" + bString.charAt(z));
-                tempString = "";
-            }
-        }
-    }
-    public static void getOperation2(int i){
-
-        switch(myOppList.get(i)){
-
-            case "/": Double tempDiv = divide(myNumList.get(i), myNumList.get(i+1));
-                myNumList.add(i, tempDiv);
-                myNumList.remove(i+1);
-                myNumList.remove(i+1);
-                myOppList.remove(i);
-                break;
-
-            case "*":  Double tempMult = multiply(myNumList.get(i), myNumList.get(i+1));
-                myNumList.add(i, tempMult);
-                myNumList.remove(i+1);
-                myNumList.remove(i+1);
-                myOppList.remove(i);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public static void getOperation3(int i){
-
-        switch(myOppList.get(i)){
-
-            case "-": Double tempSub = subtract(myNumList.get(i), myNumList.get(i+1));
-                myNumList.add(i, tempSub);
-                myNumList.remove(i+1);
-                myNumList.remove(i+1);
-                myOppList.remove(i);
-                break;
-
-            case "+":  Double tempAdd = add(myNumList.get(i), myNumList.get(i+1));
-                myNumList.add(i, tempAdd);
-                myNumList.remove(i+1);
-                myNumList.remove(i+1);
-                myOppList.remove(i);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public static boolean findMultOrDiv(String xString){
-        return (xString.equals("*") || xString.equals("/"));
-    }
-    public static boolean findAddorSub(String yString){
-        return (yString.equals("+") || yString.equals("-"));
-    }
-
-    public static boolean listContainsMultOrDiv(ArrayList<String> arraylist){
-        return arraylist.contains("*") || arraylist.contains("/");
-    }
-    public static boolean listContainsAddOrSub(ArrayList<String> arrayList) {
-        return arrayList.contains("+") || arrayList.contains("-");
-    }
-
-    public static double getOperation(ArrayList<String> arrayListA, int i, ArrayList<Double> arrayListB){
-
-        switch(arrayListA.get(i)){
-            case "+":  return add(arrayListB.get(i), arrayListB.get(i+1));
-            case "-": return subtract(arrayListB.get(i), arrayListB.get(i+1));
-            case "/": return divide(arrayListB.get(i), arrayListB.get(i+1));
-            case "*": return multiply(arrayListB.get(i), arrayListB.get(i+1));
-        }
-        return 0;
-    }
-
-    public static double add (double a, double b){
-        return a + b;
-    }
-
-    public static double subtract(double a, double b){
-        return a - b;
-    }
-
-    public static double divide (double a, double b){
-        return a/b;
-    }
-
-    public static double multiply (double a, double b){
-        return a * b;
-    }
 }
