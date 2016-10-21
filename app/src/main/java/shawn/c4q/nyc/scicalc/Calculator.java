@@ -586,9 +586,6 @@ public class Calculator {
                 String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
             }
-            if (!inputString.isEmpty() && (Math.floor(Double.valueOf(inputString)) == (Double.valueOf(inputString)))) {
-                inputString = inputString.substring(0,findDecimalIdx(inputString));
-            }
             return inputString;
         }
     

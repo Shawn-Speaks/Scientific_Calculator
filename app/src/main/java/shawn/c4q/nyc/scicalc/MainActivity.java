@@ -2,19 +2,15 @@ package shawn.c4q.nyc.scicalc;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "DEBUG TOOL";
-    StringBuilder myBuiltStr = new StringBuilder();
     String tempStr = "";
     TextView inputTextView;
     private static final String myPlaceHolder = "random_string";
-    int idxOfLastOpp = 0;
-    int idxOfDecimal = 0;
     boolean decimalAllowed = true;
 
     @Override
@@ -70,13 +66,14 @@ public class MainActivity extends AppCompatActivity {
             tempStr = makeNice(tempStr);
             Calculator calc = new Calculator();
             tempStr = calc.calculate(tempStr);
+            if (!tempStr.isEmpty() && (Math.floor(Double.valueOf(tempStr)) == (Double.valueOf(tempStr)))) {
+                tempStr = tempStr.substring(0,findLastDecimalIdx(tempStr));
+            }
             inputTextView.setText(tempStr);
-            idxOfDecimal = 0;
-            idxOfLastOpp = 0;
         } else {
 
             if (tempStr.length() == 0 && (buttonID == R.id.portrait_division || buttonID == R.id.portrait_plus || buttonID == R.id.portrait_multiplication)) { //IF NO BUTTON WAS PRESSED DISABLE OPERATIONS BESIDES MINUS.
-                myBuiltStr.append("");
+                tempStr = tempStr.concat("");
             } else {
                 if (!tempStr.isEmpty() && (isLastCharOperand(tempStr.charAt(tempStr.length() - 1)) && isLastCharOperand(buttonPressedStrForm.charAt(0)))) {
                     if (buttonID == R.id.portrait_division || buttonID == R.id.portrait_plus || buttonID == R.id.portrait_multiplication) {
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } else if (buttonID == R.id.portrait_minus) {
                         if (tempStr.charAt(tempStr.length() - 1) == '-') {
-                            myBuiltStr.append("");
+                            tempStr = tempStr.concat("");
                         } else {
                             tempStr = tempStr.concat(buttonPressedStrForm);
                             inputTextView.setText(tempStr);
@@ -106,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
             decimalAllowed = true;
         } else
             decimalAllowed = false;
-//        }
-        Log.d(TAG, "index of last opperator:" + String.valueOf(findLastOperatorIdx(tempStr)));
-        Log.d(TAG, "index of last Decimal:" + String.valueOf(findLastDecimalIdx(tempStr)));
-
     }
 
     static String matchParens(String inputString) {
@@ -190,5 +183,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return operatorIdx;
     }
-
 }
