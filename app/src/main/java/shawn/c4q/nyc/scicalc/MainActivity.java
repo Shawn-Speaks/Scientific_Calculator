@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String myPlaceHolder = "random_string";
     int idxOfLastOpp = 0;
     int idxOfDecimal = 0;
+    boolean decimalAllowed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
             tempStr = (String) savedInstanceState.getCharSequence(myPlaceHolder);
             inputTextView.setText(tempStr);
         }
-
     }
 
     @Override
@@ -45,27 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public void buttonOnClick(View view) {
         int buttonID = view.getId();
         Button button = (Button) view;
-        boolean decimalAllowed = true; //SET TRUE WHEN DECIMAL IS PRESSED, RESET WHEN OPERATION OR TRIG IS CALLED
         String buttonPressedStrForm = button.getText().toString();
-
-
-        if (tempStr.length() > 0) {
-            for (int i = 0; i < tempStr.length(); i++) {
-                if (isLastCharOperand(tempStr.charAt(i))) {
-                    idxOfLastOpp = i;
-                } else if (tempStr.charAt(i) == '.') {
-                    idxOfDecimal = i;
-                }
-            }
-            if (idxOfDecimal > idxOfLastOpp) {
-                decimalAllowed = false;
-            } else
-                decimalAllowed = true;
-        }
-
-        Log.d(TAG, "index of last opperator:" + String.valueOf(idxOfLastOpp));
-        Log.d(TAG, "index of last Decimal:" + String.valueOf(idxOfDecimal));
-
 
         if (buttonID == (R.id.portrait_delete)) {
             if (tempStr.length() > 0) {
@@ -79,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
             if (decimalAllowed) {
                 tempStr = tempStr.concat(buttonPressedStrForm);
                 inputTextView.setText(tempStr);
-            }
+            }else
+                tempStr = tempStr.concat("");
         } else if (buttonID == (R.id.sin) || buttonID == (R.id.cos) || buttonID == (R.id.tan)) {
             tempStr = tempStr.concat(buttonPressedStrForm + "(");
             inputTextView.setText(tempStr);
@@ -90,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
             Calculator calc = new Calculator();
             tempStr = calc.calculate(tempStr);
             inputTextView.setText(tempStr);
+            idxOfDecimal = 0;
+            idxOfLastOpp = 0;
         } else {
 
             if (tempStr.length() == 0 && (buttonID == R.id.portrait_division || buttonID == R.id.portrait_plus || buttonID == R.id.portrait_multiplication)) { //IF NO BUTTON WAS PRESSED DISABLE OPERATIONS BESIDES MINUS.
@@ -118,6 +101,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
+        if (findLastDecimalIdx(tempStr) <= findLastOperatorIdx(tempStr)) {
+            decimalAllowed = true;
+        } else
+            decimalAllowed = false;
+//        }
+        Log.d(TAG, "index of last opperator:" + String.valueOf(findLastOperatorIdx(tempStr)));
+        Log.d(TAG, "index of last Decimal:" + String.valueOf(findLastDecimalIdx(tempStr)));
+
     }
 
     static String matchParens(String inputString) {
@@ -148,11 +140,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static String fillInLast(String inputString){
-        if(inputString.charAt(inputString.length()-1) == ('*') || inputString.charAt(inputString.length()-1) == ('/')){
-            inputString = inputString.concat("1");
-        }
-        if(inputString.charAt(inputString.length()-1) == ('-') || inputString.charAt(inputString.length()-1) == ('+')){
-            inputString = inputString.concat("0");
+        if(!inputString.isEmpty()) {
+            if (inputString.charAt(inputString.length() - 1) == ('*') || inputString.charAt(inputString.length() - 1) == ('/')) {
+                inputString = inputString.concat("1");
+            } else if (inputString.charAt(inputString.length() - 1) == ('-') || inputString.charAt(inputString.length() - 1) == ('+')) {
+                inputString = inputString.concat("0");
+            }
         }
         return inputString;
     }
@@ -177,4 +170,25 @@ public class MainActivity extends AppCompatActivity {
         }
         return toReturn;
     }
+
+    static int findLastDecimalIdx(String inputString){
+        int decimalIdx = -1; //Initialized as -1 to make comparison vs inputString easier.
+        for (int i = 0; i < inputString.length(); i++) {
+            if(inputString.charAt(i) == '.'){
+                decimalIdx = i;
+            }
+        }
+        return decimalIdx;
+    }
+
+    static int findLastOperatorIdx(String inputString){
+        int operatorIdx = -1; //Initialized as -1 to make comparison vs inputString easier.
+        for (int i = 0; i < inputString.length(); i++) {
+            if(isLastCharOperand(inputString.charAt(i))){
+                operatorIdx = i;
+            }
+        }
+        return operatorIdx;
+    }
+
 }

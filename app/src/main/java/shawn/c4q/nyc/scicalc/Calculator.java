@@ -586,13 +586,13 @@ public class Calculator {
                 String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
             }
-            if (Math.floor(Double.valueOf(inputString)) == (Double.valueOf(inputString))) {
-                inputString = inputString.substring(0,findDecimal(inputString));
+            if (!inputString.isEmpty() && (Math.floor(Double.valueOf(inputString)) == (Double.valueOf(inputString)))) {
+                inputString = inputString.substring(0,findDecimalIdx(inputString));
             }
             return inputString;
         }
     
-        private int findDecimal(String inputString){
+        private int findDecimalIdx(String inputString){
             int decimalIdx = 0;
             for (int i = 0; i < inputString.length(); i++) {
                 if(inputString.charAt(i) == '.'){
