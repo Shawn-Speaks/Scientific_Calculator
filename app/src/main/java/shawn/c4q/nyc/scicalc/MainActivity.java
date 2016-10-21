@@ -84,17 +84,12 @@ public class MainActivity extends AppCompatActivity {
             tempStr = tempStr.concat(buttonPressedStrForm + "(");
             inputTextView.setText(tempStr);
         } else if (buttonID == (R.id.portrait_equals)) {
-
             tempStr = fillInLast(tempStr);
-
             tempStr = matchParens(tempStr);
-
             tempStr = makeNice(tempStr);
-
             Calculator calc = new Calculator();
             tempStr = calc.calculate(tempStr);
             inputTextView.setText(tempStr);
-
         } else {
 
             if (tempStr.length() == 0 && (buttonID == R.id.portrait_division || buttonID == R.id.portrait_plus || buttonID == R.id.portrait_multiplication)) { //IF NO BUTTON WAS PRESSED DISABLE OPERATIONS BESIDES MINUS.
@@ -182,61 +177,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return toReturn;
     }
-
-
 }
-
-
-/* EXCEPTIONS TO HANDLE~~~~~~~~~~~
-
- IF userinput(i) == ('*' || '/') DISABLE '*', '/', '+' SOLVED
-
-
- ************** HARD LOGIC ***********************
- *                                               *
- *  IF USER LAST INPUT NUMBER CONTAINS A DECIMAL *
- *  DISABLE '.' FROM BEING PRESSED IT WILL BREAK *
- *                  STUFF                        *
- *  **********************************************
-
-
-
- if (!inputString.contains(operand)){     ~~ if user has not input an operand/trig/factorial disable equal button.
-        DISABLE EQUALS BUTTON
-  }
-  ^^^ SOLVED ^^^^
-
-
-  if (userInput(userInput.length()-1) == '0'){
-        DISABLE 0 button.
-   }IRRELEVANT
-
-
-
-   if (userInput(i) == '/' && (number following) ('/') == 0){
-    answer == INFINITY.
-    }
-
-
-
-WHEN ORIENTATION == PORTRAIT
-
-
-
-
- if (!inputString.contains(operand)){     ~~ if user has not input an operand disable equal button.
-        DISABLE EQUALS BUTTON
-  }
-
- IF userinput(i) == '='{
-        if inputString(inputString.charAt(inputString.length()-1) == ('+' || '-'){
-            inputString.append('0')    ~~~ add or subtract zero to end of string.
-            ~~ calculate ~~
-        else if inputString(inputString.charAt(inputString.length()-1)) == ('*' || '/'){
-        inputString.append('1')     ~~~~~ divide or multiply one resulting in same number.
-       ~~~ calculate ~~~
-}
-
-
-
-*/

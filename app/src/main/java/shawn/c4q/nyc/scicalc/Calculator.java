@@ -591,8 +591,7 @@ public class Calculator {
             }
             return inputString;
         }
-
-
+    
         private int findDecimal(String inputString){
             int decimalIdx = 0;
             for (int i = 0; i < inputString.length(); i++) {
@@ -601,8 +600,6 @@ public class Calculator {
             }
             return decimalIdx;
         }
-
-
 
         /**
          * isNegNum checks if the input string is a negative number by checking if any operands are in the string after the

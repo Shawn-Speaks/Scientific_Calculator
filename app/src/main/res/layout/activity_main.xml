@@ -72,7 +72,7 @@
             android:textStyle="bold"
             android:textColor="@color/blue"
             android:id="@+id/portrait_clear"
-            android:onClick="buttonOnClick  "/>
+            android:onClick="buttonOnClick"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
