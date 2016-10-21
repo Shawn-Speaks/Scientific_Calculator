@@ -85,7 +85,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="x!"
+                        android:text="!"
                         android:textSize="20sp"
                         android:background="@drawable/my_button_bg2"
                         android:textColor="@color/blue"

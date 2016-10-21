@@ -449,145 +449,160 @@ public class Calculator {
                     String operatedString = inputString.replace(toReplace, replacement);
                     return calculate(operatedString);
                 }
-            }else if(inputString.contains(fact)){
+            } else if (inputString.contains(fact)) {
                 String[] thisCalculation = getFactArray(inputString);
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = inputString.substring(start,end) + "!";
+                String toReplace = inputString.substring(start, end) + "!";
                 String replacement = factorial(thisCalculation[0]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(natLog)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"n");
+            } else if (inputString.contains(natLog)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "n");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = natLog + inputString.substring(start,end);
-                String replacement = naturalLog(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = natLog + inputString.substring(start, end);
+                String replacement = naturalLog(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(log)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"g");
+            } else if (inputString.contains(log)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "g");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = log + inputString.substring(start,end);
-                String replacement = log(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = log + inputString.substring(start, end);
+                String replacement = log(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(sin)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"n");
+            } else if (inputString.contains(sin)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "n");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = sin + inputString.substring(start,end);
-                String replacement = sine(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = sin + inputString.substring(start, end);
+                String replacement = sine(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(cos)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"s");
+            } else if (inputString.contains(cos)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "s");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = cos + inputString.substring(start,end);
-                String replacement = cosine(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = cos + inputString.substring(start, end);
+                String replacement = cosine(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(tan)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"n");
+            } else if (inputString.contains(tan)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "n");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = tan + inputString.substring(start,end);
-                String replacement = tangent(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = tan + inputString.substring(start, end);
+                String replacement = tangent(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(arcSin)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"n");
+            } else if (inputString.contains(arcSin)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "n");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = arcSin + inputString.substring(start,end);
-                String replacement = arcSine(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = arcSin + inputString.substring(start, end);
+                String replacement = arcSine(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(arcCos)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"n");
+            } else if (inputString.contains(arcCos)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "n");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = arcCos + inputString.substring(start,end);
-                String replacement = arcCosine(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = arcCos + inputString.substring(start, end);
+                String replacement = arcCosine(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(arcTan)){
-                String [] thisCalculation = getTrigOpearndArray(inputString,"n");
+            } else if (inputString.contains(arcTan)) {
+                String[] thisCalculation = getTrigOpearndArray(inputString, "n");
                 int start = Integer.parseInt(thisCalculation[1]);
                 int end = Integer.parseInt(thisCalculation[2]);
-                String toReplace = arcTan + inputString.substring(start,end);
-                String replacement = arcTangent(thisCalculation[0],thisCalculation[3]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = arcTan + inputString.substring(start, end);
+                String replacement = arcTangent(thisCalculation[0], thisCalculation[3]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(exponent)){
-                String[] thisCalculation = getOperandsArray(inputString,exponent);
+            } else if (inputString.contains(exponent)) {
+                String[] thisCalculation = getOperandsArray(inputString, exponent);
                 int start = Integer.parseInt(thisCalculation[2]);
                 int end = Integer.parseInt(thisCalculation[3]);
-                String toReplace = inputString.substring(start,end);
-                String replacement = exponent(thisCalculation[0],thisCalculation[1],thisCalculation[4],thisCalculation[5]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = inputString.substring(start, end);
+                String replacement = exponent(thisCalculation[0], thisCalculation[1], thisCalculation[4], thisCalculation[5]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(exp)){
-                String[] thisCalculation = getOperandsArray(inputString,exp);
+            } else if (inputString.contains(exp)) {
+                String[] thisCalculation = getOperandsArray(inputString, exp);
                 int start = Integer.parseInt(thisCalculation[2]);
                 int end = Integer.parseInt(thisCalculation[3]);
-                String toReplace = inputString.substring(start,end);
-                String replacement = exp(thisCalculation[0],thisCalculation[1],thisCalculation[4],thisCalculation[5]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = inputString.substring(start, end);
+                String replacement = exp(thisCalculation[0], thisCalculation[1], thisCalculation[4], thisCalculation[5]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(multiplication)){
-                String[] thisCalculation = getOperandsArray(inputString,multiplication);
+            } else if (inputString.contains(multiplication)) {
+                String[] thisCalculation = getOperandsArray(inputString, multiplication);
                 int start = Integer.parseInt(thisCalculation[2]);
                 int end = Integer.parseInt(thisCalculation[3]);
-                String toReplace = inputString.substring(start,end);
-                String replacement = multiply(thisCalculation[0],thisCalculation[1],thisCalculation[4],thisCalculation[5]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = inputString.substring(start, end);
+                String replacement = multiply(thisCalculation[0], thisCalculation[1], thisCalculation[4], thisCalculation[5]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(divide)){
-                String[] thisCalculation = getOperandsArray(inputString,divide);
+            } else if (inputString.contains(divide)) {
+                String[] thisCalculation = getOperandsArray(inputString, divide);
                 int start = Integer.parseInt(thisCalculation[2]);
                 int end = Integer.parseInt(thisCalculation[3]);
-                String toReplace = inputString.substring(start,end);
-                String replacement = divide(thisCalculation[0],thisCalculation[1],thisCalculation[4],thisCalculation[5]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = inputString.substring(start, end);
+                String replacement = divide(thisCalculation[0], thisCalculation[1], thisCalculation[4], thisCalculation[5]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
 
-            }else if(inputString.contains(add)){
-                String[] thisCalculation = getOperandsArray(inputString,add);
+            } else if (inputString.contains(add)) {
+                String[] thisCalculation = getOperandsArray(inputString, add);
                 int start = Integer.parseInt(thisCalculation[2]);
                 int end = Integer.parseInt(thisCalculation[3]);
-                String toReplace = inputString.substring(start,end);
-                String replacement = add(thisCalculation[0],thisCalculation[1],thisCalculation[4],thisCalculation[5]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String toReplace = inputString.substring(start, end);
+                String replacement = add(thisCalculation[0], thisCalculation[1], thisCalculation[4], thisCalculation[5]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
-            }else if(inputString.contains(subtract)){
-                String[] thisCalculation = getOperandsArray(inputString,subtract);
+            } else if (inputString.contains(subtract)) {
+                String[] thisCalculation = getOperandsArray(inputString, subtract);
                 int start = Integer.parseInt(thisCalculation[2]);
                 int end = Integer.parseInt(thisCalculation[3]);
-                String toReplace = inputString.substring(start,end);
-                if(isNegNum(toReplace)){
+                String toReplace = inputString.substring(start, end);
+                if (isNegNum(toReplace)) {
                     return toReplace;
                 }
-                String replacement = subtract(thisCalculation[0],thisCalculation[1],thisCalculation[4],thisCalculation[5]);
-                String operatedString = inputString.replace(toReplace,replacement);
+                String replacement = subtract(thisCalculation[0], thisCalculation[1], thisCalculation[4], thisCalculation[5]);
+                String operatedString = inputString.replace(toReplace, replacement);
                 return calculate(operatedString);
+            }
+            if (Math.floor(Double.valueOf(inputString)) == (Double.valueOf(inputString))) {
+                inputString = inputString.substring(0,findDecimal(inputString));
             }
             return inputString;
         }
+
+
+        private int findDecimal(String inputString){
+            int decimalIdx = 0;
+            for (int i = 0; i < inputString.length(); i++) {
+                if(inputString.charAt(i) == '.'){
+                    decimalIdx = i;                }
+            }
+            return decimalIdx;
+        }
+
+
 
         /**
          * isNegNum checks if the input string is a negative number by checking if any operands are in the string after the
